@@ -2,20 +2,20 @@ import React, {usePosts, useState, useEffect} from 'react';
 import TaskItem from "../UI/TaskItem/TaskItem";
 import Taska from '../Taska'
 import InputForm from "../UI/Input/inputForm";
-import Select from "../UI/Select/Select";
 import {useFetching} from "../../hooks/useFetching";
 import {TodosService} from "../../API/TodosService";
 import TaskList from "../TaskList";
 import MyModal from "../UI/MyModal";
 import axios from "axios";
-
+import {Dropdown} from 'react-bootstrap';
+import Select from '../Select';
 
 const ColumnItem = ({column}) => {
 
     const [todos, setTodos] = useState([]);
     const [answer, setAnswer] = useState({message: ''})
     const [newTodo, setNewTodo] = useState(
-        {name: '', place: '', text: '', date_begin: '', date_end: '', tag: '', group_id: column.group_id})
+        {header: '', place: '', text: '', date_begin: '', date_end: '', tag: '', group_id: column.group_id})
 
     useEffect(() => {
         fetch('http://localhost:5001/todos/' + column.group_id, {
@@ -66,11 +66,12 @@ const ColumnItem = ({column}) => {
 
 
     const newMessage = (message) => {
-        setNewTodo({...newTodo })
+        setNewTodo({...newTodo})
         console.log(message)
+        setTodos([...todos, message])
         axios.post('http://localhost:5001/todos', {
             group_id: column.group_id,
-            header: message.name,
+            header: message.header,
             place: message.place,
             date_begin: message.date_begin,
             date_end: message.date_end,
@@ -98,7 +99,7 @@ const ColumnItem = ({column}) => {
                         Поиск
                     </button>
                 </form>
-                <Select/>
+                <Select />
                 <TaskList messages={todos}/>
             </div>
             <InputForm onClick={(e) => show(e)}/>
