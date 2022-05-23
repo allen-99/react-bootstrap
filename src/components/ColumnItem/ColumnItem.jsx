@@ -83,8 +83,6 @@ const ColumnItem = ({column}) => {
                 console.log(answer)
                 console.log(response.data)
             })
-        // console.log(newTodo)
-        // console.log(message)
 
     }
     return (
@@ -99,7 +97,7 @@ const ColumnItem = ({column}) => {
                         Поиск
                     </button>
                 </form>
-                <Select />
+                <Select/>
                 <TaskList messages={todos}/>
             </div>
             <InputForm onClick={(e) => show(e)}/>

@@ -10,9 +10,9 @@ const NavBar = () => {
                 <Navbar.Toggle aria-controls="basic-navbar-nav"/>
                 <Navbar.Collapse id="basic-navbar-nav">
                     <Nav className="me-auto h5">
-                        <Nav.Link href="/login">Вход</Nav.Link>
+                        {/*<Nav.Link href="/login">Вход</Nav.Link>*/}
                         <Nav.Link href="/todo">Задачи</Nav.Link>
-                        <Nav.Link href="/sign-up">Регистрация</Nav.Link>
+                        {/*<Nav.Link href="/sign-up">Регистрация</Nav.Link>*/}
                         <Nav.Link href="/done-tasks">Готовые задачи</Nav.Link>
                     </Nav>
                 </Navbar.Collapse>
