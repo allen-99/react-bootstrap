@@ -9,9 +9,13 @@ import TaskList from "../TaskList";
 import MyModal from "../UI/MyModal";
 import axios from "axios";
 
+
 const ColumnItem = ({column}) => {
 
     const [todos, setTodos] = useState([]);
+    const [answer, setAnswer] = useState({message: ''})
+    const [newTodo, setNewTodo] = useState(
+        {name: '', place: '', text: '', date_begin: '', date_end: '', tag: '', group_id: column.group_id})
 
     useEffect(() => {
         fetch('http://localhost:5001/todos/' + column.group_id, {
@@ -23,8 +27,8 @@ const ColumnItem = ({column}) => {
             .then(response => response.json())
             .then(response => {
                 setTodos(response)
-                console.log(todos)
-                console.log(response)
+                // console.log(todos)
+                // console.log(response)
             })
             .catch(error => console.log(error))
     }, [])
@@ -44,28 +48,43 @@ const ColumnItem = ({column}) => {
     }
 
     // useEffect(() => {
-    //          fetch('http://localhost:5001/todos' , {
-    //              'methods': 'POST',
-    //              body: JSON.stringify(todo),
-    //              headers: {
-    //                  'Content-Type': 'application/json'
-    //              }
-    //          })
-    //              .then(response => response.json())
-    //              .then(response => {
-    //                  setAnswer(response)
-    //                  console.log(answer)
-    //                  console.log(response)
-    //              })
-    //              .catch(error => console.log(error))
-    //          },[])
+    //     fetch('http://localhost:5001/todos', {
+    //         'methods': 'POST',
+    //         body: JSON.stringify(newTodo),
+    //         headers: {
+    //             'Content-Type': 'application/json'
+    //         }
+    //     })
+    //         .then(response => response.json())
+    //         .then(response => {
+    //             setAnswer(response)
+    //             console.log(answer)
+    //             console.log(response)
+    //         })
+    //         .catch(error => console.log(error))
+    // }, [])
 
-    const [newTodo, setNewTodo] = useState(
-        {name: '', place: '', text: '', date_begin:'', date_end: '', tag: '', group_id: column.group_id})
+
     const newMessage = (message) => {
-        setNewTodo(message)
-        console.log(newTodo)
+        setNewTodo({...newTodo })
         console.log(message)
+        axios.post('http://localhost:5001/todos', {
+            group_id: column.group_id,
+            header: message.name,
+            place: message.place,
+            date_begin: message.date_begin,
+            date_end: message.date_end,
+            text: message.text,
+            tag_id: message.tag_id
+        })
+            .then((response) => {
+                setAnswer(response.data)
+                console.log(answer)
+                console.log(response.data)
+            })
+        // console.log(newTodo)
+        // console.log(message)
+
     }
     return (
         <div className={'col list-group min-vw-30 m-2 col-3 '}>

@@ -8,7 +8,7 @@ const TaskList = ({messages, remove}) => {
         return(
             <p className={"p-3 h5 bg-light"}>Добавте задачу </p>
         )}
-    messages.forEach(message => console.log(message))
+    // messages.forEach(message => console.log(message))
     return (
         <div className={'bg-light'} >
             {messages.map((message) =>
