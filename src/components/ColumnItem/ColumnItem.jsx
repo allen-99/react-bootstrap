@@ -1,21 +1,31 @@
-import React, {usePosts, useState, useEffect} from 'react';
+import React, {useState, useEffect} from 'react';
 import TaskItem from "../UI/TaskItem/TaskItem";
 import Taska from '../Taska'
 import InputForm from "../UI/Input/inputForm";
 import {useFetching} from "../../hooks/useFetching";
+import {usePosts} from '../../hooks/usePosts'
 import {TodosService} from "../../API/TodosService";
 import TaskList from "../TaskList";
 import MyModal from "../UI/MyModal";
+import EditModal from '../UI/Modals/EditModal'
 import axios from "axios";
 import {Dropdown} from 'react-bootstrap';
 import Select from '../Select';
 
 const ColumnItem = ({column}) => {
 
-    const [todos, setTodos] = useState([]);
+    const [todos, setTodos] = useState([])
     const [answer, setAnswer] = useState({message: ''})
+    const [filterTodos, setFilterTodos] = useState(todos)
+    const [modalShow, setModalShow] = useState(false);
+    const [editModalShow, setEditModalShow] = useState(false);
+    const [filter, setFilter] = useState({sort: '', query: ''})
+    const sortedAndFilteredTotos = usePosts(todos, filter.sort, filter.query)
+    const [editingTodo, setEditingTodo] = useState(
+        {header: '', place: '', text: '', date_begin: '', date_end: '', tag: '', group_id: column.group_id})
     const [newTodo, setNewTodo] = useState(
         {header: '', place: '', text: '', date_begin: '', date_end: '', tag: '', group_id: column.group_id})
+    const [isEditTodos, setIsEditTodos] = useState(false)
 
     useEffect(() => {
         fetch('http://localhost:5001/todos/' + column.group_id, {
@@ -27,14 +37,9 @@ const ColumnItem = ({column}) => {
             .then(response => response.json())
             .then(response => {
                 setTodos(response)
-                // console.log(todos)
-                // console.log(response)
             })
             .catch(error => console.log(error))
     }, [])
-
-
-    const [modalShow, setModalShow] = React.useState(false);
 
     function show(e) {
         e.preventDefault();
@@ -43,28 +48,32 @@ const ColumnItem = ({column}) => {
 
     function print(e) {
         e.preventDefault();
-
         console.log(todos)
     }
 
-    // useEffect(() => {
-    //     fetch('http://localhost:5001/todos', {
-    //         'methods': 'POST',
-    //         body: JSON.stringify(newTodo),
-    //         headers: {
-    //             'Content-Type': 'application/json'
-    //         }
-    //     })
-    //         .then(response => response.json())
-    //         .then(response => {
-    //             setAnswer(response)
-    //             console.log(answer)
-    //             console.log(response)
-    //         })
-    //         .catch(error => console.log(error))
-    // }, [])
+    const delete_todo = (task_id) => {
+        console.log('delete')
+        setTodos(todos.filter(m => m._id !== task_id))
+        axios.post('http://localhost:5001/delete_todo', {
+            _id: task_id
+        })
+            .then((response) => {
+                setAnswer(response.data)
+                console.log(answer)
+                console.log(response.data)
+            })
+    }
 
+    const click_on_edit_button = (task) => {
+        setEditModalShow(true)
+        setEditingTodo(task)
+    }
+    const editedTodo = (todo) => {
+        console.log((todo))
+    }
 
+    console.log(sortedAndFilteredTotos)
+    console.log(filter)
     const newMessage = (message) => {
         setNewTodo({...newTodo})
         console.log(message)
@@ -89,23 +98,24 @@ const ColumnItem = ({column}) => {
         <div className={'col list-group min-vw-30 m-2 col-3 '}>
             <div className={'bg-light'}>
                 <p className={"p-3 h5 bg-light"}>{column.group_name} </p>
-                <form className="d-flex m-3">
-                    <input className="form-control me-2 " type="search" placeholder="Поиск..." aria-label="Search"/>
-                    <button className="btn btn-outline-success"
-                            type="submit"
-                            onClick={(e) => print(e)}>
-                        Поиск
-                    </button>
-                </form>
-                <Select/>
-                <TaskList messages={todos}/>
+                <Select filter={filter} setFilter={setFilter}/>
+                <TaskList messages={todos}
+                          delete_todo={delete_todo}
+                          edit_todo={click_on_edit_button}
+                />
             </div>
             <InputForm onClick={(e) => show(e)}/>
             <MyModal
                 show={modalShow}
                 onHide={() => setModalShow(false)}
                 newMessage={newMessage}
-
+            />
+            <EditModal
+                show={editModalShow}
+                onHide={() => setEditModalShow(false)}
+                oldTodo={editingTodo}
+                setOldTodo={setEditingTodo}
+                newMessage={editedTodo}
             />
         </div>
 

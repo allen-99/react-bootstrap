@@ -1,13 +1,13 @@
 import React from 'react';
 import TaskInfo from "../../TaskInfo";
+import {Accordion} from 'react-bootstrap'
 
 const TaskItem = (props) => {
 
     return (
-        <a  className={"list-group-item h-25 bg-info bg-opacity-50 btn btn-primary " }
-                    onClick={props.onClick}>
-            {props.task}
-        </a>
+        <Accordion.Header>
+            {props.task.header}
+        </Accordion.Header>
     );
 };
 

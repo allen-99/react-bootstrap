@@ -3,12 +3,7 @@ import {Modal} from 'react-bootstrap'
 import {Button, InputGroup, FormControl, FloatingLabel, Form} from 'react-bootstrap';
 import moment from 'moment'
 
-const MyModal = (props) => {
-
-    const [todo, setTodo] = useState(
-        {header: '', place: '', text: '', date_begin: '', date_end: '', tag_id: ''})
-
-    console.log(todo)
+const EditModal = (props) => {
 
     const today_date = () => {
         const timeElapsed = Date.now();
@@ -17,14 +12,14 @@ const MyModal = (props) => {
         const month = today.getMonth();
         const day = today.getDate();
         const date = day + '.' + month + '.' + year;
-        setTodo({...todo, date_end: date});
+        props.setOldTodo({...props.oldTodo, date_end: date});
     }
 
     const AddNewMessage = (e) => {
         e.preventDefault()
         let a = document.getElementById('header')
         console.log(a.className)
-        if (todo.header == '') {
+        if (props.oldTodo.header == '') {
             a.className += ' is-invalid'
         } else {
             a.className = 'form-control';
@@ -32,39 +27,31 @@ const MyModal = (props) => {
             let date_b = document.getElementById('date_begin')
             let date_e = document.getElementById('date_end')
             let equal = 0
-            if (todo.date_begin != '' && (!moment(todo.date_begin, "DD.MM.YYYY", true).isValid())) {
+            if (props.oldTodo.date_begin != '' && (!moment(props.oldTodo.date_begin, "DD.MM.YYYY", true).isValid())) {
                 date_b.className += ' is-invalid'
-                console.log('first da')
             } else {
                 date_b.className = 'form-control';
                 equal++;
-                console.log('first net')
             }
-            if (todo.date_end != '' && (!moment(todo.date_end, "DD.MM.YYYY", true).isValid())) {
+            if (props.oldTodo.date_end != '' && (!moment(props.oldTodo.date_end, "DD.MM.YYYY", true).isValid())) {
                 date_e.className += ' is-invalid'
-                console.log('second da')
             } else {
                 date_e.className = 'form-control';
                 equal++;
-                console.log('second net' + equal)
             }
             if (equal == 2
-                && Date.parse(todo.date_begin) > Date.parse(todo.date_end)
+                && Date.parse(props.oldTodo.date_begin) > Date.parse(props.oldTodo.date_end)
                 && date_b != '' && date_e != '') {
                 date_e.className += ' is-invalid'
                 date_b.className += ' is-invalid'
                 equal = 3
-                console.log('third da')
-            } else if (todo.date_begin == '' || todo.date_end == '' && equal != 3) {
-                console.log('third need')
+            } else if (props.oldTodo.date_begin == '' || props.oldTodo.date_end == '' && equal != 3) {
                 date_b.className = 'form-control';
                 date_e.className = 'form-control';
-                props.newMessage(todo)
-                console.log(todo)
+                props.newMessage(props.oldTodo)
                 props.onHide()
             } else {
-                props.newMessage(todo)
-                console.log(todo)
+                props.newMessage(props.oldTodo)
                 props.onHide()
             }
 
@@ -82,7 +69,7 @@ const MyModal = (props) => {
         >
             <Modal.Header closeButton>
                 <Modal.Title id="contained-modal-title-vcenter">
-                    Добавить задачу
+                    Изменить задачу
                 </Modal.Title>
             </Modal.Header>
             <Modal.Body>
@@ -92,8 +79,8 @@ const MyModal = (props) => {
                 >
                     <Form.Control type="text"
                                   id='header'
-                                  value={todo.header}
-                                  onChange={e => setTodo({...todo, header: e.target.value})}
+                                  value={props.oldTodo.header}
+                                  onChange={e => props.setOldTodo({...props.oldTodo, header: e.target.value})}
                                   placeholder="Купить молоко"/>
                 </FloatingLabel>
                 <FloatingLabel
@@ -102,8 +89,8 @@ const MyModal = (props) => {
                     className="mb-3"
                 >
                     <Form.Control type="text"
-                                  value={todo.place}
-                                  onChange={e => setTodo({...todo, place: e.target.value})}
+                                  value={props.oldTodo.place}
+                                  onChange={e => props.setOldTodo({...props.oldTodo, place: e.target.value})}
                                   placeholder="ДВФУ"/>
                 </FloatingLabel>
                 <FloatingLabel
@@ -113,8 +100,8 @@ const MyModal = (props) => {
                     <Form.Control type="text"
                                   placeholder="Купить очень много молока в магазине"
                                   as="textarea"
-                                  value={todo.text}
-                                  onChange={e => setTodo({...todo, text: e.target.value})}
+                                  value={props.oldTodo.text}
+                                  onChange={e => props.setOldTodo({...props.oldTodo, text: e.target.value})}
                                   style={{height: '100px'}}/>
                 </FloatingLabel>
                 <FloatingLabel
@@ -123,9 +110,9 @@ const MyModal = (props) => {
                     <InputGroup className="">
                         <Form.Control type="text"
                                       aria-label="12.11.2020"
-                                      value={todo.date_begin}
+                                      value={props.oldTodo.date_begin}
                                       id='date_begin'
-                                      onChange={e => setTodo({...todo, date_begin: e.target.value})}
+                                      onChange={e => props.setOldTodo({...props.oldTodo, date_begin: e.target.value})}
                                       placeholder="Дата начала"/>
                         <Button variant="outline-secondary" id="button-addon1">
                             Сегодня
@@ -138,9 +125,9 @@ const MyModal = (props) => {
                     <InputGroup className="">
                         <Form.Control type="text"
                                       aria-label="12.11.2020"
-                                      value={todo.date_end}
+                                      value={props.oldTodo.date_end}
                                       id='date_end'
-                                      onChange={e => setTodo({...todo, date_end: e.target.value})}
+                                      onChange={e => props.setOldTodo({...props.oldTodo, date_end: e.target.value})}
                                       placeholder="Дата окончания"/>
                         <Button variant="outline-secondary" onClink={today_date}>
                             Сегодня
@@ -151,9 +138,9 @@ const MyModal = (props) => {
                     controlId="floatingSelect"
                     label="Выберете нужное">
                     <Form.Select aria-label="Выбрать тэг"
-                                 value={todo.tag_id}
+                                 value={props.oldTodo.tag_id}
                                  type='text'
-                                 onChange={e => setTodo({...todo, tag_id: e.target.value})}>
+                                 onChange={e => props.setOldTodo({...props.oldTodo, tag_id: e.target.value})}>
                         <option value='0'>Не выбрано</option>
                         <option value='1'>Срочно</option>
                         <option value='2'>Не очень</option>
@@ -162,11 +149,11 @@ const MyModal = (props) => {
                 </FloatingLabel>
             </Modal.Body>
             <Modal.Footer>
-                <Button onClick={AddNewMessage}>Добавить</Button>
+                <Button onClick={AddNewMessage}>Обновить</Button>
                 <Button variant="secondary" onClick={props.onHide}>Закрыть</Button>
             </Modal.Footer>
         </Modal>
     );
 };
 
-export default MyModal;
+export default EditModal;

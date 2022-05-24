@@ -1,18 +1,20 @@
 import React, {useContext, useState} from 'react';
 import TaskItem from "./UI/TaskItem/TaskItem";
 import TaskInfo from "./TaskInfo";
+import {Accordion} from 'react-bootstrap'
 
-const Taska = ({task}) => {
-
-    const [isOpen, setIsOpen] = useState(false);
+const Taska = ({task, delete_todo, edit_todo}) => {
 
     return (
-        <div className={"list-group-item h-25 bg-light" }>
-            <TaskItem task={task.header} onClick={() => {
-                setIsOpen(!isOpen)
-            }}/>
-            {isOpen && <TaskInfo task={task}/>}
-        </div>
+        <Accordion.Item className={"list-group-item h-25 bg-light" }
+             eventKey={task._id}
+        >
+            <TaskItem task={task} />
+            <TaskInfo task={task}
+                                 delete_todo={delete_todo}
+                                 edit_todo={edit_todo}
+            />
+        </Accordion.Item>
     );
 };
 
