@@ -70,6 +70,21 @@ const ColumnItem = ({column}) => {
     }
     const editedTodo = (todo) => {
         console.log((todo))
+        axios.post('http://localhost:5001/edit_todo', {
+            group_id: column.group_id,
+            header: todo.header,
+            place: todo.place,
+            date_begin: todo.date_begin,
+            date_end: todo.date_end,
+            text: todo.text,
+            tag_id: todo.tag_id,
+            _id: todo._id
+        })
+            .then((response) => {
+                setAnswer(response.data) //_id
+            })
+        setTodos(todos.filter(m => m._id !== todo._id))
+        setTodos([...todos, todo])
     }
 
     console.log(sortedAndFilteredTotos)
@@ -77,7 +92,6 @@ const ColumnItem = ({column}) => {
     const newMessage = (message) => {
         setNewTodo({...newTodo})
         console.log(message)
-        setTodos([...todos, message])
         axios.post('http://localhost:5001/todos', {
             group_id: column.group_id,
             header: message.header,
@@ -88,10 +102,10 @@ const ColumnItem = ({column}) => {
             tag_id: message.tag_id
         })
             .then((response) => {
-                setAnswer(response.data)
-                console.log(answer)
-                console.log(response.data)
+                setAnswer(response.data) //_id
+                message._id = response.data
             })
+        setTodos([...todos, message])
 
     }
     return (
