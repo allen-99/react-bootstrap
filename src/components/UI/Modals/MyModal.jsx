@@ -23,8 +23,7 @@ const MyModal = (props) => {
     const AddNewMessage = (e) => {
         e.preventDefault()
         let a = document.getElementById('header')
-        console.log(a.className)
-        if (todo.header == '') {
+        if (todo.header === '') {
             a.className += ' is-invalid'
         } else {
             a.className = 'form-control';
@@ -32,7 +31,7 @@ const MyModal = (props) => {
             let date_b = document.getElementById('date_begin')
             let date_e = document.getElementById('date_end')
             let equal = 0
-            if (todo.date_begin != '' && (!moment(todo.date_begin, "DD.MM.YYYY", true).isValid())) {
+            if (todo.date_begin !== '' && (!moment(todo.date_begin, "DD.MM.YYYY", true).isValid())) {
                 date_b.className += ' is-invalid'
                 console.log('first da')
             } else {
@@ -40,7 +39,7 @@ const MyModal = (props) => {
                 equal++;
                 console.log('first net')
             }
-            if (todo.date_end != '' && (!moment(todo.date_end, "DD.MM.YYYY", true).isValid())) {
+            if (todo.date_end !== '' && (!moment(todo.date_end, "DD.MM.YYYY", true).isValid())) {
                 date_e.className += ' is-invalid'
                 console.log('second da')
             } else {
@@ -48,19 +47,18 @@ const MyModal = (props) => {
                 equal++;
                 console.log('second net' + equal)
             }
-            if (equal == 2
+            if (equal === 2
                 && Date.parse(todo.date_begin) > Date.parse(todo.date_end)
-                && date_b != '' && date_e != '') {
+                && date_b !== '' && date_e !== '') {
                 date_e.className += ' is-invalid'
                 date_b.className += ' is-invalid'
                 equal = 3
                 console.log('third da')
-            } else if (todo.date_begin == '' || todo.date_end == '' && equal != 3) {
+            } else if ((todo.date_begin === '' || todo.date_end === '' ) && equal !== 3) {
                 console.log('third need')
                 date_b.className = 'form-control';
                 date_e.className = 'form-control';
                 props.newMessage(todo)
-                console.log(todo)
                 props.onHide()
             } else {
                 props.newMessage(todo)

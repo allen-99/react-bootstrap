@@ -6,7 +6,7 @@ import {useFetching} from "../../hooks/useFetching";
 import {usePosts} from '../../hooks/usePosts'
 import {TodosService} from "../../API/TodosService";
 import TaskList from "../TaskList";
-import MyModal from "../UI/MyModal";
+import MyModal from "../UI/Modals/MyModal";
 import EditModal from '../UI/Modals/EditModal'
 import axios from "axios";
 import {Dropdown} from 'react-bootstrap';
@@ -25,7 +25,7 @@ const ColumnItem = ({column}) => {
         {header: '', place: '', text: '', date_begin: '', date_end: '', tag: '', group_id: column.group_id})
     const [newTodo, setNewTodo] = useState(
         {header: '', place: '', text: '', date_begin: '', date_end: '', tag: '', group_id: column.group_id})
-    const [isEditTodos, setIsEditTodos] = useState(false)
+
 
     useEffect(() => {
         fetch('http://localhost:5001/todos/' + column.group_id, {
@@ -39,16 +39,11 @@ const ColumnItem = ({column}) => {
                 setTodos(response)
             })
             .catch(error => console.log(error))
-    }, [])
+    }, [column.group_id])
 
-    function show(e) {
+    const  show_modal = (e) => {
         e.preventDefault();
         setModalShow(true)
-    }
-
-    function print(e) {
-        e.preventDefault();
-        console.log(todos)
     }
 
     const delete_todo = (task_id) => {
@@ -68,8 +63,8 @@ const ColumnItem = ({column}) => {
         setEditModalShow(true)
         setEditingTodo(task)
     }
+
     const editedTodo = (todo) => {
-        console.log((todo))
         axios.post('http://localhost:5001/edit_todo', {
             group_id: column.group_id,
             header: todo.header,
@@ -91,7 +86,6 @@ const ColumnItem = ({column}) => {
     console.log(filter)
     const newMessage = (message) => {
         setNewTodo({...newTodo})
-        console.log(message)
         axios.post('http://localhost:5001/todos', {
             group_id: column.group_id,
             header: message.header,
@@ -118,7 +112,7 @@ const ColumnItem = ({column}) => {
                           edit_todo={click_on_edit_button}
                 />
             </div>
-            <InputForm onClick={(e) => show(e)}/>
+            <InputForm onClick={(e) => show_modal(e)}/>
             <MyModal
                 show={modalShow}
                 onHide={() => setModalShow(false)}
