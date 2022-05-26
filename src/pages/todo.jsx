@@ -42,8 +42,8 @@ const Todo = () => {
                     desk_id: newColumn.desk_id,
                     group_name: newColumn.group_name
                 })
-                // newColumn.group_id = response.data[1]
-                // newColumn._id = response.data[0]
+                newColumn.group_id = response.data[1]
+                newColumn._id = response.data[0]
             })
         setColumns([...columns, newColumn])
     }

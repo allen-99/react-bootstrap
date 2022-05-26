@@ -9,7 +9,7 @@ import TaskList from "../TaskList";
 import MyModal from "../UI/Modals/MyModal";
 import EditModal from '../UI/Modals/EditModal'
 import axios from "axios";
-import {Dropdown} from 'react-bootstrap';
+import {Dropdown, Row} from 'react-bootstrap';
 import Select from '../Select';
 
 const ColumnItem = ({column}) => {
@@ -82,8 +82,8 @@ const ColumnItem = ({column}) => {
         setTodos([...todos, todo])
     }
 
-    console.log(sortedAndFilteredTotos)
-    console.log(filter)
+    // console.log(sortedAndFilteredTotos)
+    // console.log(filter)
     const newMessage = (message) => {
         setNewTodo({...newTodo})
         axios.post('http://localhost:5001/todos', {
@@ -103,9 +103,9 @@ const ColumnItem = ({column}) => {
 
     }
     return (
-        <div className={'col list-group min-vw-30 m-2 col-3 '}>
+        <Row className={'col list-group min-vw-30 m-2 col-sm-3'} >
             <div className={'bg-light'}>
-                <p className={"p-3 h5 bg-light"}>{column.group_name} </p>
+                <p className={"p-3 h5 bg-light"}>{column.group_name}  </p>
                 <Select filter={filter} setFilter={setFilter}/>
                 <TaskList messages={todos}
                           delete_todo={delete_todo}
@@ -125,7 +125,7 @@ const ColumnItem = ({column}) => {
                 setOldTodo={setEditingTodo}
                 newMessage={editedTodo}
             />
-        </div>
+        </Row>
 
     );
 };
