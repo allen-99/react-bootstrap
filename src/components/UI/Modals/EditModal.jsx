@@ -27,25 +27,25 @@ const EditModal = (props) => {
             let date_b = document.getElementById('date_begin')
             let date_e = document.getElementById('date_end')
             let equal = 0
-            if (props.oldTodo.date_begin != '' && (!moment(props.oldTodo.date_begin, "DD.MM.YYYY", true).isValid())) {
+            if (props.oldTodo.date_begin !== '' && (!moment(props.oldTodo.date_begin, "DD.MM.YYYY", true).isValid())) {
                 date_b.className += ' is-invalid'
             } else {
                 date_b.className = 'form-control';
                 equal++;
             }
-            if (props.oldTodo.date_end != '' && (!moment(props.oldTodo.date_end, "DD.MM.YYYY", true).isValid())) {
+            if (props.oldTodo.date_end !== '' && (!moment(props.oldTodo.date_end, "DD.MM.YYYY", true).isValid())) {
                 date_e.className += ' is-invalid'
             } else {
                 date_e.className = 'form-control';
                 equal++;
             }
-            if (equal == 2
+            if (equal === 2
                 && Date.parse(props.oldTodo.date_begin) > Date.parse(props.oldTodo.date_end)
-                && date_b != '' && date_e != '') {
+                && date_b !== '' && date_e !== '') {
                 date_e.className += ' is-invalid'
                 date_b.className += ' is-invalid'
                 equal = 3
-            } else if (props.oldTodo.date_begin == '' || props.oldTodo.date_end == '' && equal != 3) {
+            } else if (props.oldTodo.date_begin === '' || props.oldTodo.date_end === '' && equal !== 3) {
                 date_b.className = 'form-control';
                 date_e.className = 'form-control';
                 props.newMessage(props.oldTodo)

@@ -9,10 +9,10 @@ import TaskList from "../TaskList";
 import MyModal from "../UI/Modals/MyModal";
 import EditModal from '../UI/Modals/EditModal'
 import axios from "axios";
-import {Dropdown, Row} from 'react-bootstrap';
+import {Dropdown, Row, DropdownButton, Container, Col} from 'react-bootstrap';
 import Select from '../Select';
 
-const ColumnItem = ({column}) => {
+const ColumnItem = ({column, editColumn, removeColumn}) => {
 
     const [todos, setTodos] = useState([])
     const [answer, setAnswer] = useState({message: ''})
@@ -102,11 +102,28 @@ const ColumnItem = ({column}) => {
         setTodos([...todos, message])
 
     }
+
     return (
         <Row className={'col list-group min-vw-30 m-2 col-sm-3'} >
             <div className={'bg-light'}>
-                <p className={"p-3 h5 bg-light"}>{column.group_name}  </p>
-                <Select filter={filter} setFilter={setFilter}/>
+                <Container >
+                    <Row className={'py-3'}>
+                        <Col className={'display-6 '}>
+                            {column.group_name}
+                        </Col>
+                        <Col className={"col-3 p-1"}>
+                            <DropdownButton id="dropdown-secondary-button"
+                                            title=''
+                                            variant={'outline-secondary'}>
+
+                                <Dropdown.Item onClick={editColumn}>Изменить</Dropdown.Item>
+                                <Dropdown.Item onClick={removeColumn}>Удалить</Dropdown.Item>
+                            </DropdownButton>
+                        </Col>
+                    </Row>
+                    <Select filter={filter} setFilter={setFilter}/>
+                </Container>
+
                 <TaskList messages={todos}
                           delete_todo={delete_todo}
                           edit_todo={click_on_edit_button}
