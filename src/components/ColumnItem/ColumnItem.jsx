@@ -116,8 +116,8 @@ const ColumnItem = ({column, editColumn, removeColumn}) => {
                                             title=''
                                             variant={'outline-secondary'}>
 
-                                <Dropdown.Item onClick={editColumn}>Изменить</Dropdown.Item>
-                                <Dropdown.Item onClick={removeColumn}>Удалить</Dropdown.Item>
+                                <Dropdown.Item onClick={() => editColumn(column)}>Изменить</Dropdown.Item>
+                                <Dropdown.Item onClick={() => removeColumn(column)}>Удалить</Dropdown.Item>
                             </DropdownButton>
                         </Col>
                     </Row>

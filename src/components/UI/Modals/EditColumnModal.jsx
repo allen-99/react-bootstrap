@@ -3,8 +3,10 @@ import {Button, FloatingLabel, Form, Modal} from "react-bootstrap";
 
 const EditColumnModal = (props) => {
 
+    //console.log(props.oldColumnName.group_name)
     const editColumn = () => {
         props.newColumnItemName(props.oldColumnName)
+        props.onHide()
     }
 
     return (
@@ -16,7 +18,7 @@ const EditColumnModal = (props) => {
         >
             <Modal.Header closeButton>
                 <Modal.Title id="contained-modal-title-vcenter">
-                    Добавить колонку
+                    Изменить название
                 </Modal.Title>
             </Modal.Header>
             <Modal.Body>
@@ -26,7 +28,7 @@ const EditColumnModal = (props) => {
                 >
                     <Form.Control type="text"
                                   id='name'
-                                  value={props.oldColumnName}
+                                  value={props.oldColumnName.group_name}
                                   onChange={e => props.setOldColumnName(e.target.value)}
                                   placeholder="To Do"/>
                 </FloatingLabel>

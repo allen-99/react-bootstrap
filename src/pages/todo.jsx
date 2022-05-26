@@ -3,13 +3,16 @@ import ColumnItem from "../components/ColumnItem/ColumnItem";
 import AddColumnItem from "../components/UI/AddColumnItem/AddColumnItem";
 import NewColumnModal from '../components/UI/Modals/NewColumnModal'
 import axios from "axios";
+import EditColumnModal from "../components/UI/Modals/EditColumnModal";
 
 const Todo = () => {
 
     const [columns, setColumns] = useState([])
     const [showModal, setShowModal] = useState(false)
+    const [showEditModal, setShowEditModal] = useState(false)
     const [answer, setAnswer] = useState({message: ''})
     const [newColumn, setNewColumn] = useState({group_name: '', group_id: 0, desk_id: 0})
+    const [editColumn, setEditColumn] = useState({group_name: '', group_id: 0, desk_id: 0})
 
     useEffect(() => {
         fetch('http://localhost:5001/columns', {
@@ -53,11 +56,26 @@ const Todo = () => {
         setShowModal(true)
     }
 
+    const openEditModal = (column) => {
+        setShowEditModal(true)
+        setEditColumn(column)
+        console.log(editColumn)
+    }
+
+    const editColumnName = (columnItem) => {
+
+    }
+
+    const removeColumn = (columnItem) => {
+
+    }
 
     return (
         <div className={'row align-items-start'}>
             {columns.map((column) => (
-                <ColumnItem column={column}/>
+                <ColumnItem column={column}
+                            editColumn={openEditModal}
+                            removeColumn={removeColumn}/>
             ))}
             <AddColumnItem onClick={(e) => openModalWindow(e)}
             />
@@ -65,6 +83,14 @@ const Todo = () => {
                             onHide={() => setShowModal(false)}
                             newColumnAdd={addNewColumn}
             />
+            <EditColumnModal show={showEditModal}
+                             onHide={() => setShowEditModal(false)}
+                             newColumnItemName={editColumnName}
+                             oldColumnName={editColumn}
+                             setOldColumnName={setEditColumn}
+            >
+
+            </EditColumnModal>
         </div>
     );
 };
