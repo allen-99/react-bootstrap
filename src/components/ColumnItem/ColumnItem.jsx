@@ -26,7 +26,6 @@ const ColumnItem = ({column, editColumn, removeColumn}) => {
     const [newTodo, setNewTodo] = useState(
         {header: '', place: '', text: '', date_begin: '', date_end: '', tag: '', group_id: column.group_id})
 
-
     useEffect(() => {
         fetch('http://localhost:5001/todos/' + column.group_id, {
             'methods': 'GET',
@@ -47,15 +46,13 @@ const ColumnItem = ({column, editColumn, removeColumn}) => {
     }
 
     const delete_todo = (task_id) => {
-        console.log('delete')
+
         setTodos(todos.filter(m => m._id !== task_id))
         axios.post('http://localhost:5001/delete_todo', {
             _id: task_id
         })
             .then((response) => {
                 setAnswer(response.data)
-                console.log(answer)
-                console.log(response.data)
             })
     }
 

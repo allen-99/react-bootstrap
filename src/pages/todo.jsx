@@ -4,6 +4,7 @@ import AddColumnItem from "../components/UI/AddColumnItem/AddColumnItem";
 import NewColumnModal from '../components/UI/Modals/NewColumnModal'
 import axios from "axios";
 import EditColumnModal from "../components/UI/Modals/EditColumnModal";
+import {CSSTransition, TransitionGroup} from "react-transition-group";
 
 const Todo = () => {
 
@@ -29,9 +30,7 @@ const Todo = () => {
     }, [])
 
     const addNewColumn = (name) => {
-        console.log(name)
         newColumn.group_name = name
-        console.log(newColumn)
         axios.post('http://localhost:5001/add_column', {
             group_id: newColumn.group_id,
             group_name: newColumn.group_name,
@@ -64,6 +63,18 @@ const Todo = () => {
 
     const editColumnName = (columnItem) => {
 
+        axios.post('http://localhost:5001/edit_column', {
+            group_id: columnItem.group_id,
+            group_name: columnItem.group_name,
+            desk_id: columnItem.desk_id,
+            _id: columnItem._id
+        })
+            .then((response) => {
+                setAnswer(response.data)
+            })
+        const a = columns.filter(d => d._id !== columnItem._id)
+        setColumns(a)
+        setColumns([...a, columnItem])
     }
 
     const removeColumn = (columnItem) => {
@@ -71,12 +82,21 @@ const Todo = () => {
     }
 
     return (
+        <TransitionGroup>
         <div className={'row align-items-start'}>
-            {columns.map((column) => (
-                <ColumnItem column={column}
-                            editColumn={openEditModal}
-                            removeColumn={removeColumn}/>
-            ))}
+                {columns.map((column) => (
+                    <CSSTransition
+                        key={column._id}
+                        timeout={500}
+                    >
+                        <ColumnItem column={column}
+                                    editColumn={openEditModal}
+                                    removeColumn={removeColumn}/>
+                    </CSSTransition>
+
+                ))}
+
+
             <AddColumnItem onClick={(e) => openModalWindow(e)}
             />
             <NewColumnModal show={showModal}
@@ -92,6 +112,7 @@ const Todo = () => {
 
             </EditColumnModal>
         </div>
+        </TransitionGroup>
     );
 };
 

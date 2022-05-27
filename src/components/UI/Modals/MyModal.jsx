@@ -8,7 +8,6 @@ const MyModal = (props) => {
     const [todo, setTodo] = useState(
         {header: '', place: '', text: '', date_begin: '', date_end: '', tag_id: ''})
 
-    console.log(todo)
 
     const today_date = () => {
         const timeElapsed = Date.now();

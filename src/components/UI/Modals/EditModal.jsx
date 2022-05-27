@@ -18,8 +18,7 @@ const EditModal = (props) => {
     const AddNewMessage = (e) => {
         e.preventDefault()
         let a = document.getElementById('header')
-        console.log(a.className)
-        if (props.oldTodo.header == '') {
+        if (props.oldTodo.header === '') {
             a.className += ' is-invalid'
         } else {
             a.className = 'form-control';

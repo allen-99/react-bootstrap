@@ -3,8 +3,9 @@ import {Button, FloatingLabel, Form, Modal} from "react-bootstrap";
 
 const EditColumnModal = (props) => {
 
-    //console.log(props.oldColumnName.group_name)
+    console.log(props.oldColumnName)
     const editColumn = () => {
+        console.log(props.oldColumnName)
         props.newColumnItemName(props.oldColumnName)
         props.onHide()
     }
@@ -29,12 +30,15 @@ const EditColumnModal = (props) => {
                     <Form.Control type="text"
                                   id='name'
                                   value={props.oldColumnName.group_name}
-                                  onChange={e => props.setOldColumnName(e.target.value)}
+                                  onChange={e => props.setOldColumnName({...props.oldColumnName, group_name: e.target.value})}
                                   placeholder="To Do"/>
                 </FloatingLabel>
             </Modal.Body>
             <Modal.Footer>
-                <Button onClick={editColumn}>Изменить</Button>
+                <Button onClick={() => {
+                    props.newColumnItemName(props.oldColumnName)
+                    props.onHide()
+                }}>Изменить</Button>
                 <Button variant="secondary" onClick={props.onHide}>Закрыть</Button>
             </Modal.Footer>
         </Modal>

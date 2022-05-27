@@ -17,7 +17,7 @@ export const usePosts = (todos, sort, query) => {
         return sortedPosts.filter(post => post.header.toLowerCase().includes(query))
     },[query, sortedPosts]);
 
-    console.log(sortedPosts)
-    console.log(query)
+    // console.log(sortedPosts)
+    // console.log(query)
     return sortedAndSearchMessage;
 }
