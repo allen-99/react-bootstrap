@@ -4,10 +4,10 @@ import Taska from "./Taska";
 import {Accordion} from 'react-bootstrap'
 
 
-const TaskList = ({messages, delete_todo, edit_todo}) => {
+const TaskList = ({messages, delete_todo, edit_todo, done_todo}) => {
     if (!messages.length) {
         return (
-            <p className={"p-3 h5 bg-light"}>Добавте задачу </p>
+            <p className={"p-3 h5 bg-light"}>Нет задач </p>
         )
     }
     return (
@@ -18,7 +18,10 @@ const TaskList = ({messages, delete_todo, edit_todo}) => {
                         key={message._id}
                         timeout={500}
                     >
-                        <Taska task={message} delete_todo={delete_todo} edit_todo={edit_todo}/>
+                        <Taska task={message}
+                               delete_todo={delete_todo}
+                               edit_todo={edit_todo}
+                               done_todo={done_todo}/>
                     </CSSTransition>
                 )}
             </TransitionGroup>

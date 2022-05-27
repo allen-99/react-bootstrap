@@ -78,7 +78,15 @@ const Todo = () => {
     }
 
     const removeColumn = (columnItem) => {
-
+        const a = columns.filter(d => d._id !== columnItem._id)
+        setColumns(a)
+        axios.post('http://localhost:5001/delete_column', {
+            _id: columnItem._id,
+            group_id: columnItem.group_id
+        })
+            .then((response) => {
+                setAnswer(response.data)
+            })
     }
 
     return (

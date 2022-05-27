@@ -22,9 +22,29 @@ const ColumnItem = ({column, editColumn, removeColumn}) => {
     const [filter, setFilter] = useState({sort: '', query: ''})
     const sortedAndFilteredTotos = usePosts(todos, filter.sort, filter.query)
     const [editingTodo, setEditingTodo] = useState(
-        {header: '', place: '', text: '', date_begin: '', date_end: '', tag: '', group_id: column.group_id})
+        {
+            header: '',
+            place: '',
+            text: '',
+            date_begin: '',
+            date_end: '',
+            tag: '',
+            group_id: column.group_id,
+            _id: '',
+            is_done: ''
+        })
     const [newTodo, setNewTodo] = useState(
-        {header: '', place: '', text: '', date_begin: '', date_end: '', tag: '', group_id: column.group_id})
+        {
+            header: '',
+            place: '',
+            text: '',
+            date_begin: '',
+            date_end: '',
+            tag: '',
+            group_id: column.group_id,
+            _id: '',
+            is_done: ''
+        })
 
     useEffect(() => {
         fetch('http://localhost:5001/todos/' + column.group_id, {
@@ -40,25 +60,24 @@ const ColumnItem = ({column, editColumn, removeColumn}) => {
             .catch(error => console.log(error))
     }, [column.group_id])
 
-    const  show_modal = (e) => {
+    const show_modal = (e) => {
         e.preventDefault();
         setModalShow(true)
     }
 
-    const delete_todo = (task_id) => {
-
-        setTodos(todos.filter(m => m._id !== task_id))
+    const delete_todo = (todo_id) => {
+        setTodos(todos.filter(m => m._id !== todo_id))
         axios.post('http://localhost:5001/delete_todo', {
-            _id: task_id
+            _id: todo_id
         })
             .then((response) => {
                 setAnswer(response.data)
             })
     }
 
-    const click_on_edit_button = (task) => {
+    const click_on_edit_button = (todo) => {
         setEditModalShow(true)
-        setEditingTodo(task)
+        setEditingTodo(todo)
     }
 
     const editedTodo = (todo) => {
@@ -70,7 +89,8 @@ const ColumnItem = ({column, editColumn, removeColumn}) => {
             date_end: todo.date_end,
             text: todo.text,
             tag_id: todo.tag_id,
-            _id: todo._id
+            _id: todo._id,
+            is_done: todo.is_done
         })
             .then((response) => {
                 setAnswer(response.data) //_id
@@ -95,15 +115,24 @@ const ColumnItem = ({column, editColumn, removeColumn}) => {
             .then((response) => {
                 setAnswer(response.data) //_id
                 message._id = response.data
+                setTodos([...todos, message])
             })
-        setTodos([...todos, message])
+    }
 
+    const done_todo = (todo_id) => {
+        setTodos(todos.filter(m => m._id !== todo_id))
+        axios.post('http://localhost:5001/done_todo', {
+            _id: todo_id
+        })
+            .then((response) => {
+                setAnswer(response.data)
+            })
     }
 
     return (
-        <Row className={'col list-group min-vw-30 m-2 col-sm-3'} >
+        <Row className={'col list-group min-vw-30 m-2 col-sm-3'}>
             <div className={'bg-light'}>
-                <Container >
+                <Container>
                     <Row className={'py-3'}>
                         <Col className={'display-6 '}>
                             {column.group_name}
@@ -124,6 +153,7 @@ const ColumnItem = ({column, editColumn, removeColumn}) => {
                 <TaskList messages={todos}
                           delete_todo={delete_todo}
                           edit_todo={click_on_edit_button}
+                          done_todo={done_todo}
                 />
             </div>
             <InputForm onClick={(e) => show_modal(e)}/>
