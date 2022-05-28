@@ -15,6 +15,7 @@ const NewColumnModal = (props) => {
         else {
             a.className = 'form-control';
             props.newColumnAdd(newColumn)
+            setNewColumn('')
             props.onHide()
         }
 

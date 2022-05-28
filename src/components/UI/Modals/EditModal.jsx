@@ -5,18 +5,10 @@ import moment from 'moment'
 
 const EditModal = (props) => {
 
-    const today_date = () => {
-        const timeElapsed = Date.now();
-        const today = new Date(timeElapsed);
-        const year = today.getFullYear()
-        const month = today.getMonth();
-        const day = today.getDate();
-        const date = day + '.' + month + '.' + year;
-        props.setOldTodo({...props.oldTodo, date_end: date});
-    }
-
     const AddNewMessage = (e) => {
+
         e.preventDefault()
+
         let a = document.getElementById('header')
         if (props.oldTodo.header === '') {
             a.className += ' is-invalid'
@@ -26,32 +18,45 @@ const EditModal = (props) => {
             let date_b = document.getElementById('date_begin')
             let date_e = document.getElementById('date_end')
             let equal = 0
+
             if (props.oldTodo.date_begin !== '' && (!moment(props.oldTodo.date_begin, "DD.MM.YYYY", true).isValid())) {
                 date_b.className += ' is-invalid'
             } else {
                 date_b.className = 'form-control';
-                equal++;
+                equal++
             }
             if (props.oldTodo.date_end !== '' && (!moment(props.oldTodo.date_end, "DD.MM.YYYY", true).isValid())) {
                 date_e.className += ' is-invalid'
+
             } else {
                 date_e.className = 'form-control';
-                equal++;
+                equal++
             }
-            if (equal === 2
-                && Date.parse(props.oldTodo.date_begin) > Date.parse(props.oldTodo.date_end)
-                && date_b !== '' && date_e !== '') {
-                date_e.className += ' is-invalid'
-                date_b.className += ' is-invalid'
-                equal = 3
-            } else if (props.oldTodo.date_begin === '' || props.oldTodo.date_end === '' && equal !== 3) {
+
+            if (equal === 2 && props.oldTodo.date_begin !== '' && props.oldTodo.date_end !== '') {
+                const [day_b, month_b, year_b] = props.oldTodo.date_begin.split('.')
+                const [day_e, month_e, year_e] =props.oldTodo.date_end.split('.')
+
+                const date_begin_correct_format = year_b + '-' + month_b + '-' + day_b
+                const date_end_correct_format = year_e + '-' + month_e + '-' + day_e
+
+                if (Date.parse(date_begin_correct_format) > Date.parse(date_end_correct_format)) {
+                    date_e.className += ' is-invalid'
+                    date_b.className += ' is-invalid'
+                    equal = 3
+                }
+            }
+            if ((props.oldTodo.date_begin === '' || props.oldTodo.date_end === '') && equal !== 3) {
                 date_b.className = 'form-control';
                 date_e.className = 'form-control';
                 props.newMessage(props.oldTodo)
                 props.onHide()
             } else {
-                props.newMessage(props.oldTodo)
-                props.onHide()
+                if (!(date_b.classList.contains('is-invalid')) && !(date_e.classList.contains('is-invalid'))) {
+                    props.newMessage(props.oldTodo)
+                    props.onHide()
+                }
+
             }
 
         }
@@ -106,32 +111,23 @@ const EditModal = (props) => {
                 <FloatingLabel
                     className="mb-3"
                 >
-                    <InputGroup className="">
-                        <Form.Control type="text"
-                                      aria-label="12.11.2020"
-                                      value={props.oldTodo.date_begin}
-                                      id='date_begin'
-                                      onChange={e => props.setOldTodo({...props.oldTodo, date_begin: e.target.value})}
-                                      placeholder="Дата начала"/>
-                        <Button variant="outline-secondary" id="button-addon1">
-                            Сегодня
-                        </Button>
-                    </InputGroup>
+                    <Form.Control type="text"
+                                  aria-label="12.11.2020"
+                                  value={props.oldTodo.date_begin}
+                                  id='date_begin'
+                                  onChange={e => props.setOldTodo({...props.oldTodo, date_begin: e.target.value})}
+                                  placeholder="Дата начала"/>
+
                 </FloatingLabel>
                 <FloatingLabel
                     className="mb-3"
                 >
-                    <InputGroup className="">
-                        <Form.Control type="text"
-                                      aria-label="12.11.2020"
-                                      value={props.oldTodo.date_end}
-                                      id='date_end'
-                                      onChange={e => props.setOldTodo({...props.oldTodo, date_end: e.target.value})}
-                                      placeholder="Дата окончания"/>
-                        <Button variant="outline-secondary" onClink={today_date}>
-                            Сегодня
-                        </Button>
-                    </InputGroup>
+                    <Form.Control type="text"
+                                  aria-label="12.11.2020"
+                                  value={props.oldTodo.date_end}
+                                  id='date_end'
+                                  onChange={e => props.setOldTodo({...props.oldTodo, date_end: e.target.value})}
+                                  placeholder="Дата окончания"/>
                 </FloatingLabel>
                 <FloatingLabel
                     controlId="floatingSelect"
