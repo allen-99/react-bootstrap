@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from 'react';
 import {Modal} from 'react-bootstrap'
-import {Button, InputGroup, FormControl, FloatingLabel, Form} from 'react-bootstrap';
+import {Button, FloatingLabel, Form} from 'react-bootstrap';
 import moment from 'moment'
 
 const EditModal = (props) => {
