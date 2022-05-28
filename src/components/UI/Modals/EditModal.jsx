@@ -131,7 +131,7 @@ const EditModal = (props) => {
                 </FloatingLabel>
                 <FloatingLabel
                     controlId="floatingSelect"
-                    label="Выберете нужное">
+                    label="Выберите тег">
                     <Form.Select aria-label="Выбрать тэг"
                                  value={props.oldTodo.tag_id}
                                  type='text'

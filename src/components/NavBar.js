@@ -1,5 +1,5 @@
 import React from "react";
-import {Container, Navbar, Nav}
+import {Container, Navbar, Nav, NavDropdown}
     from 'react-bootstrap';
 
 const NavBar = () => {
@@ -14,6 +14,11 @@ const NavBar = () => {
                         <Nav.Link href="/todo">Задачи</Nav.Link>
                         {/*<Nav.Link href="/sign-up">Регистрация</Nav.Link>*/}
                         <Nav.Link href="/done-tasks">Готовые задачи</Nav.Link>
+                        <NavDropdown title="Тег" id="basic-nav-dropdown">
+                            <NavDropdown.Item href="#action/3.1">Добавить тег</NavDropdown.Item>
+                            <NavDropdown.Item href="#action/3.3">Показать теги</NavDropdown.Item>
+
+                        </NavDropdown>
                     </Nav>
                 </Navbar.Collapse>
             </Container>

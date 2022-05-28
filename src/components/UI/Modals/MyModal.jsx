@@ -138,8 +138,8 @@ const MyModal = (props) => {
                 </FloatingLabel>
                 <FloatingLabel
                     controlId="floatingSelect"
-                    label="Выберете нужное">
-                    <Form.Select aria-label="Выбрать тэг"
+                    label="Выберите тэг">
+                    <Form.Select aria-label="Выбрать тег"
                                  value={todo.tag_id}
                                  type='text'
                                  onChange={e => setTodo({...todo, tag_id: e.target.value})}>

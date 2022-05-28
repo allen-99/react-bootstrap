@@ -2,11 +2,13 @@ import React, {useEffect, useState} from 'react';
 import {Button, Table} from 'react-bootstrap'
 import {CSSTransition, TransitionGroup} from "react-transition-group";
 import Taska from "../components/Taska";
+import axios from "axios";
 
 const DoneTasks = () => {
 
     const [doneTodo, setDoneTodo] = useState([])
-    const [columns, setColumns] = useState([])
+    let [columns, setColumns] = useState([])
+    const [answer, setAnswer] = useState({message: ''})
 
 
     useEffect(() => {
@@ -31,18 +33,30 @@ const DoneTasks = () => {
         })
             .then(response => response.json())
             .then(response => {
-                setColumns(response)
+                columns = response
+                doneTodo.map((todo) => {
+                    const groupName = columns.filter((column) => todo.group_id === column.group_id)[0].group_name
+                    todo['group'] = groupName
+
+                })
+
             })
             .catch(error => console.log(error))
     }, []) //columns
 
 
-    doneTodo.map((todo) => {
-        const groupName = columns.filter((column) => todo.group_id === column.group_id)[0].group_name
-        todo['group'] = groupName
-        const tagName = 's'
+
+
+    const deleteTodo = (todo) => {
         console.log(todo)
-    })
+        setDoneTodo(doneTodo.filter(m => m._id !== todo._id))
+        axios.post('http://localhost:5001/delete_todo', {
+            _id: todo._id
+        })
+            .then((response) => {
+                setAnswer(response.data)
+            })
+    }
     return (
         <Table striped bordered hover>
             <thead>
@@ -61,7 +75,7 @@ const DoneTasks = () => {
             {doneTodo.map((todo) =>
                 <tr>
                     <td>
-                        <Button variant={"secondary"}>
+                        <Button variant={"secondary"} onClick={() => deleteTodo(todo)}>
                             Удалить
                         </Button>
                     </td>
