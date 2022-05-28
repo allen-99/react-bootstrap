@@ -3,6 +3,7 @@ import {Modal} from 'react-bootstrap'
 import {Button, InputGroup, FormControl, FloatingLabel, Form} from 'react-bootstrap';
 import moment from 'moment'
 
+
 const MyModal = (props) => {
 
     const [todo, setTodo] = useState(
@@ -144,9 +145,9 @@ const MyModal = (props) => {
                                  type='text'
                                  onChange={e => setTodo({...todo, tag_id: e.target.value})}>
                         <option value='0'>Не выбрано</option>
-                        <option value='1'>Срочно</option>
-                        <option value='2'>Не очень</option>
-                        <option value='3'>Подождет</option>
+                        {props.tags.map((tag) =>
+                            <option value={tag.tag_id}>{tag.tag_name}</option>
+                        )}
                     </Form.Select>
                 </FloatingLabel>
             </Modal.Body>

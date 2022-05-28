@@ -137,9 +137,9 @@ const EditModal = (props) => {
                                  type='text'
                                  onChange={e => props.setOldTodo({...props.oldTodo, tag_id: e.target.value})}>
                         <option value='0'>Не выбрано</option>
-                        <option value='1'>Срочно</option>
-                        <option value='2'>Не очень</option>
-                        <option value='3'>Подождет</option>
+                        {props.tags.map((tag) =>
+                            <option value={tag.tag_id}>{tag.tag_name}</option>
+                        )}
                     </Form.Select>
                 </FloatingLabel>
             </Modal.Body>

@@ -45,7 +45,14 @@ const ColumnItem = ({column, editColumn, removeColumn}) => {
             _id: '',
             is_done: ''
         })
+    const [tags, setTags] = useState([])
 
+    const get_tags = () => {
+        axios.get('http://localhost:5001/tags')
+            .then((response) => {
+                setTags(response.data)
+            })
+    }
     useEffect(() => {
         fetch('http://localhost:5001/todos/' + column.group_id, {
             'methods': 'GET',
@@ -61,8 +68,10 @@ const ColumnItem = ({column, editColumn, removeColumn}) => {
     }, [column.group_id])
 
     const show_modal = (e) => {
-        e.preventDefault();
+        e.preventDefault()
+        get_tags()
         setModalShow(true)
+
     }
 
     const delete_todo = (todo_id) => {
@@ -77,6 +86,7 @@ const ColumnItem = ({column, editColumn, removeColumn}) => {
 
     const click_on_edit_button = (todo) => {
         setEditModalShow(true)
+        get_tags()
         setEditingTodo(todo)
     }
 
@@ -161,6 +171,7 @@ const ColumnItem = ({column, editColumn, removeColumn}) => {
                 show={modalShow}
                 onHide={() => setModalShow(false)}
                 newMessage={newMessage}
+                tags={tags}
             />
             <EditModal
                 show={editModalShow}
@@ -168,6 +179,7 @@ const ColumnItem = ({column, editColumn, removeColumn}) => {
                 oldTodo={editingTodo}
                 setOldTodo={setEditingTodo}
                 newMessage={editedTodo}
+                tags={tags}
             />
         </Row>
 
