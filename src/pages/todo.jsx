@@ -9,11 +9,13 @@ import {CSSTransition, TransitionGroup} from "react-transition-group";
 const Todo = () => {
 
     const [columns, setColumns] = useState([])
+    const [tags, setTags] = useState([])
     const [showModal, setShowModal] = useState(false)
     const [showEditModal, setShowEditModal] = useState(false)
     const [answer, setAnswer] = useState({message: ''})
     const [newColumn, setNewColumn] = useState({group_name: '', group_id: 0, desk_id: 0})
     const [editColumn, setEditColumn] = useState({group_name: '', group_id: 0, desk_id: 0})
+
 
     useEffect(() => {
         fetch('http://localhost:5001/columns', {
@@ -28,6 +30,17 @@ const Todo = () => {
             })
             .catch(error => console.log(error))
     }, [])
+
+    useEffect(() => {
+        fetch('http://localhost:5001/tags')
+            .then(response => response.json())
+            .then(response => {
+                setTags(response)
+            })
+            .catch(error => console.log(error))
+
+    }, [])
+
 
     const addNewColumn = (name) => {
         newColumn.group_name = name
@@ -91,7 +104,7 @@ const Todo = () => {
 
     return (
         <TransitionGroup>
-        <div className={'row align-items-start'}>
+            <div className={'row align-items-start'}>
                 {columns.map((column) => (
                     <CSSTransition
                         key={column._id}
@@ -99,27 +112,28 @@ const Todo = () => {
                     >
                         <ColumnItem column={column}
                                     editColumn={openEditModal}
-                                    removeColumn={removeColumn}/>
+                                    removeColumn={removeColumn}
+                                    tags={tags}/>
                     </CSSTransition>
 
                 ))}
 
 
-            <AddColumnItem onClick={(e) => openModalWindow(e)}
-            />
-            <NewColumnModal show={showModal}
-                            onHide={() => setShowModal(false)}
-                            newColumnAdd={addNewColumn}
-            />
-            <EditColumnModal show={showEditModal}
-                             onHide={() => setShowEditModal(false)}
-                             newColumnItemName={editColumnName}
-                             oldColumnName={editColumn}
-                             setOldColumnName={setEditColumn}
-            >
+                <AddColumnItem onClick={(e) => openModalWindow(e)}
+                />
+                <NewColumnModal show={showModal}
+                                onHide={() => setShowModal(false)}
+                                newColumnAdd={addNewColumn}
+                />
+                <EditColumnModal show={showEditModal}
+                                 onHide={() => setShowEditModal(false)}
+                                 newColumnItemName={editColumnName}
+                                 oldColumnName={editColumn}
+                                 setOldColumnName={setEditColumn}
+                >
 
-            </EditColumnModal>
-        </div>
+                </EditColumnModal>
+            </div>
         </TransitionGroup>
     );
 };

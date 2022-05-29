@@ -20,7 +20,7 @@ const ColumnItem = ({column, editColumn, removeColumn}) => {
     const [modalShow, setModalShow] = useState(false);
     const [editModalShow, setEditModalShow] = useState(false);
     const [filter, setFilter] = useState({sort: '', query: ''})
-    const sortedAndFilteredTotos = usePosts(todos, filter.sort, filter.query)
+    const sortedAndFilteredTodos = usePosts(todos, filter.sort, filter.query)
     const [editingTodo, setEditingTodo] = useState(
         {
             header: '',
@@ -31,7 +31,8 @@ const ColumnItem = ({column, editColumn, removeColumn}) => {
             tag: '',
             group_id: column.group_id,
             _id: '',
-            is_done: ''
+            is_done: '',
+            tag_name: ''
         })
     const [newTodo, setNewTodo] = useState(
         {
@@ -43,8 +44,10 @@ const ColumnItem = ({column, editColumn, removeColumn}) => {
             tag: '',
             group_id: column.group_id,
             _id: '',
-            is_done: ''
+            is_done: '',
+            tag_name: ''
         })
+
     const [tags, setTags] = useState([])
 
     const get_tags = () => {
@@ -53,6 +56,7 @@ const ColumnItem = ({column, editColumn, removeColumn}) => {
                 setTags(response.data)
             })
     }
+
     useEffect(() => {
         fetch('http://localhost:5001/todos/' + column.group_id, {
             'methods': 'GET',
@@ -103,10 +107,12 @@ const ColumnItem = ({column, editColumn, removeColumn}) => {
             is_done: todo.is_done
         })
             .then((response) => {
-                setAnswer(response.data) //_id
+                console.log(response.data)
+                todo.tag_name = response.data.tag_name
+                setTodos(todos.filter(m => m._id !== todo._id))
+                setTodos([...todos, todo])
+
             })
-        setTodos(todos.filter(m => m._id !== todo._id))
-        setTodos([...todos, todo])
     }
 
     // console.log(sortedAndFilteredTotos)
@@ -124,7 +130,8 @@ const ColumnItem = ({column, editColumn, removeColumn}) => {
         })
             .then((response) => {
                 setAnswer(response.data) //_id
-                message._id = response.data
+                message._id = response.data.todo_id
+                message.tag_name = response.data.tag_name
                 setTodos([...todos, message])
             })
     }
