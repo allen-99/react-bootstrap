@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react';
+import React, {useState, useEffect, useMemo} from 'react';
 import TaskItem from "../UI/TaskItem/TaskItem";
 import Taska from '../Taska'
 import InputForm from "../UI/Input/inputForm";
@@ -16,10 +16,10 @@ const ColumnItem = ({column, editColumn, removeColumn}) => {
 
     const [todos, setTodos] = useState([])
     const [answer, setAnswer] = useState({message: ''})
-    const [filterTodos, setFilterTodos] = useState(todos)
     const [modalShow, setModalShow] = useState(false);
     const [editModalShow, setEditModalShow] = useState(false);
-    const [filter, setFilter] = useState({sort: '', query: ''})
+    const [filter, setFilter] = useState('')
+    const [searchQuery, setSearchQuery] = useState('')
     const sortedAndFilteredTodos = usePosts(todos, filter.sort, filter.query)
     const [editingTodo, setEditingTodo] = useState(
         {
@@ -47,14 +47,37 @@ const ColumnItem = ({column, editColumn, removeColumn}) => {
             is_done: '',
             tag_name: ''
         })
-
     const [tags, setTags] = useState([])
+
+
+
+    const sortedTodos = useMemo(() => {
+        console.log('a')
+        const items = {
+            "Названию": 'header',
+            "Дате окончания": 'date_end',
+            "Описанию": 'text'
+        }
+        if (filter) {
+            return [...todos].sort((a, b) => a[items[filter]].localeCompare(b[items[filter]]))
+        }
+        return todos
+    },[filter, todos])
+
+    const sortedAndSearchedTodos = useMemo(() => {
+        return sortedTodos.filter(todo => todo.header.includes(searchQuery))
+    },[sortedTodos,searchQuery])
+
 
     const get_tags = () => {
         axios.get('http://localhost:5001/tags')
             .then((response) => {
                 setTags(response.data)
             })
+    }
+
+    const sortPost = (filter) => {
+        setFilter(filter)
     }
 
     useEffect(() => {
@@ -115,8 +138,6 @@ const ColumnItem = ({column, editColumn, removeColumn}) => {
             })
     }
 
-    // console.log(sortedAndFilteredTotos)
-    // console.log(filter)
     const newMessage = (message) => {
         setNewTodo({...newTodo})
         axios.post('http://localhost:5001/todos', {
@@ -164,10 +185,14 @@ const ColumnItem = ({column, editColumn, removeColumn}) => {
                             </DropdownButton>
                         </Col>
                     </Row>
-                    <Select filter={filter} setFilter={setFilter}/>
+                    <Select
+                        filter={filter}
+                        setSearchQuery={setSearchQuery}
+                        searchQuery={searchQuery}
+                        sortPost={sortPost}/>
                 </Container>
 
-                <TaskList messages={todos}
+                <TaskList messages={sortedAndSearchedTodos}
                           delete_todo={delete_todo}
                           edit_todo={click_on_edit_button}
                           done_todo={done_todo}

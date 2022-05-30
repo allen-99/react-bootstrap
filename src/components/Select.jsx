@@ -1,24 +1,26 @@
-import React from 'react';
+import React, {useState} from 'react';
 import {Dropdown, DropdownButton, InputGroup, FormControl, Container} from 'react-bootstrap'
 
 
-const Select = ({filter, setFilter}) => {
+const Select = ({filter, sortPost, setSearchQuery, searchQuery}) => {
 
-    const items = ["Названию", "Дате окончания", "Описанию", 'Сбросить']
+    const items = ["Названию", "Дате окончания", "Описанию"]
 
 
     const set_filter = (filter) => {
         console.log(filter)
-        setFilter(filter)
+        sortPost(filter)
     }
 
     return (
         <Container className={'p-1'}>
             <InputGroup className="mb-2">
                 <FormControl className={''}
-                    placeholder="Поиск..."
-                    aria-label="search"
-                    aria-describedby="basic-addon1"
+                             placeholder="Поиск..."
+                             aria-label="search"
+                             aria-describedby="basic-addon1"
+                             value={searchQuery}
+                             onChange={e => setSearchQuery(e.target.value)}
                 />
             </InputGroup>
             {/*<form className="d-flex m-3">*/}

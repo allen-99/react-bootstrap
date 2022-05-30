@@ -3,7 +3,7 @@ import {ButtonGroup, Button, Accordion, Form} from 'react-bootstrap'
 
 const TaskInfo = ({task, delete_todo, edit_todo, done_todo}) => {
 
-    console.log(task.tag_name)
+
     return (
         <Accordion.Body>
             <div className="card card-body">
