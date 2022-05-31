@@ -1,9 +1,7 @@
-import React, {Fragment, useState, usePosts, useEffect} from 'react'
-import {useFetching} from './hooks/useFetching'
+import React from 'react'
 import {BrowserRouter as Router, Routes, Route}
     from 'react-router-dom';
 
-import ColumnItem from "./components/ColumnItem/ColumnItem"
 import "./App.css"
 import NavBar from './components/NavBar'
 

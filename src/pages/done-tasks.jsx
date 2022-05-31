@@ -11,6 +11,7 @@ const DoneTasks = () => {
     const [answer, setAnswer] = useState({message: ''})
 
 
+
     useEffect(() => {
         fetch('http://localhost:5001/done_todo', {
             'methods': 'GET',
@@ -24,6 +25,9 @@ const DoneTasks = () => {
             })
             .catch(error => console.log(error))
     }, []) //todos
+
+    let groupName
+
     useEffect(() => {
         fetch('http://localhost:5001/columns', {
             'methods': 'GET',
@@ -35,11 +39,8 @@ const DoneTasks = () => {
             .then(response => {
                 columns = response
                 doneTodo.map((todo) => {
-                    const groupName = columns.filter((column) => todo.group_id === column.group_id)[0].group_name
-                    todo['group'] = groupName
-
+                    groupName = columns.filter((column) => todo.group_id === column.group_id)[0].group_name
                 })
-
             })
             .catch(error => console.log(error))
     }, []) //columns
@@ -67,8 +68,6 @@ const DoneTasks = () => {
                 <th>Описание</th>
                 <th>Дата начала</th>
                 <th>Дата окончания</th>
-                <th>Название столбца</th>
-                <th>Тэг</th>
             </tr>
             </thead>
             <tbody>
@@ -84,8 +83,6 @@ const DoneTasks = () => {
                     <td>{todo.text}</td>
                     <td>{todo.date_begin}</td>
                     <td>{todo.date_end}</td>
-                    <td>{todo.group}</td>
-                    <td>{todo.tag_id}</td>
                 </tr>
             )}
             </tbody>
